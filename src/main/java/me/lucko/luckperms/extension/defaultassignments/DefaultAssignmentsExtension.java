@@ -91,11 +91,13 @@ public class DefaultAssignmentsExtension implements Extension {
 
     private ConfigurationAdapter getConfigurationAdapter(LuckPermsApiProvider luckPerms) throws Exception {
         Field apiProviderPluginField = LuckPermsApiProvider.class.getDeclaredField("plugin");
+        apiProviderPluginField.setAccessible(true);
         LuckPermsPlugin plugin = (LuckPermsPlugin) apiProviderPluginField.get(luckPerms);
 
         AbstractConfiguration configuration = (AbstractConfiguration) plugin.getConfiguration();
 
         Field configurationAdapterField = AbstractConfiguration.class.getDeclaredField("adapter");
+        configurationAdapterField.setAccessible(true);
         return (ConfigurationAdapter) configurationAdapterField.get(configuration);
     }
 
