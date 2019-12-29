@@ -26,11 +26,10 @@
 package me.lucko.luckperms.extension.defaultassignments;
 
 import com.google.common.collect.ImmutableList;
-import me.lucko.luckperms.common.model.PermissionHolder;
-import net.luckperms.api.model.DataType;
+import net.luckperms.api.model.PermissionHolder;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.NodeEqualityPredicate;
-import net.luckperms.api.node.Tristate;
+import net.luckperms.api.util.Tristate;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -51,10 +50,11 @@ class AssignmentExpression {
             throw new NullPointerException("script engine");
         }
 
-        Predicate<Node> checker = node -> holder.hasNode(DataType.NORMAL, node, NodeEqualityPredicate.IGNORE_VALUE_OR_IF_TEMPORARY) == tristate;
+        Predicate<Node> checker = node -> holder.data().contains(node, NodeEqualityPredicate.IGNORE_VALUE_OR_IF_TEMPORARY) == tristate;
 
         String exp = this.expression.stream().map(t -> t.forExpression(checker)).collect(Collectors.joining())
-                .replace("&", "&&").replace("|", "||");
+                .replace("&", "&&")
+                .replace("|", "||");
 
         try {
             String result = engine.eval(exp).toString();

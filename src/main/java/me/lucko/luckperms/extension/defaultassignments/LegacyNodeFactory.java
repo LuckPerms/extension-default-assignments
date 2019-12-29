@@ -26,7 +26,6 @@
 package me.lucko.luckperms.extension.defaultassignments;
 
 import com.google.common.base.Splitter;
-import me.lucko.luckperms.common.node.factory.NodeBuilders;
 import net.luckperms.api.context.DefaultContextKeys;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.NodeBuilder;
@@ -120,12 +119,12 @@ final class LegacyNodeFactory {
 
     private static NodeBuilder<?, ?> unpackContexts(String permission) {
         if (!NODE_CONTEXTS_PATTERN.matcher(permission).matches()) {
-            return NodeBuilders.determineMostApplicable(permission);
+            return Node.builder(permission);
         } else {
             List<String> contextParts = CONTEXT_SPLITTER.splitToList(permission.substring(1));
             // 0 = context, 1 = node
 
-            NodeBuilder<?, ?> builder = NodeBuilders.determineMostApplicable(contextParts.get(1));
+            NodeBuilder<?, ?> builder = Node.builder(contextParts.get(1));
             try {
                 Map<String, String> map = LEGACY_CONTEXT_PART_SPLITTER.split(contextParts.get(0));
                 for (Map.Entry<String, String> e : map.entrySet()) {

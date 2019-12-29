@@ -25,13 +25,12 @@
 
 package me.lucko.luckperms.extension.defaultassignments;
 
-import me.lucko.luckperms.common.model.User;
-import me.lucko.luckperms.common.util.ImmutableCollectors;
-import net.luckperms.api.model.DataType;
+import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
-import net.luckperms.api.node.Tristate;
+import net.luckperms.api.util.Tristate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 class AssignmentRule {
     private final AssignmentExpression hasTrueExpression;
@@ -46,8 +45,8 @@ class AssignmentRule {
         this.hasTrueExpression = hasTrueExpression == null ? null : new AssignmentExpression(hasTrueExpression);
         this.hasFalseExpression = hasFalseExpression == null ? null : new AssignmentExpression(hasFalseExpression);
         this.lacksExpression = lacksExpression == null ? null : new AssignmentExpression(lacksExpression);
-        this.toGive = toGive.stream().map(s -> LegacyNodeFactory.fromLegacyString(s)).collect(ImmutableCollectors.toList());
-        this.toTake = toTake.stream().map(s -> LegacyNodeFactory.fromLegacyString(s)).collect(ImmutableCollectors.toList());
+        this.toGive = toGive.stream().map(s -> LegacyNodeFactory.fromLegacyString(s)).collect(Collectors.toList());
+        this.toTake = toTake.stream().map(s -> LegacyNodeFactory.fromLegacyString(s)).collect(Collectors.toList());
         this.setPrimaryGroup = setPrimaryGroup;
     }
 
@@ -81,15 +80,15 @@ class AssignmentRule {
 
         // The holder meets all of the requirements of this rule.
         for (Node n : this.toTake) {
-            user.unsetNode(DataType.NORMAL, n);
+            user.data().remove(n);
         }
 
         for (Node n : this.toGive) {
-            user.setNode(DataType.NORMAL, n, true);
+            user.data().add(n);
         }
 
         if (this.setPrimaryGroup != null) {
-            user.getPrimaryGroup().setStoredValue(this.setPrimaryGroup);
+            user.setPrimaryGroup(this.setPrimaryGroup);
         }
 
         return true;
