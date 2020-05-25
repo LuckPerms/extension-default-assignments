@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'me.lucko.luckperms'
-version '1.0.0'
+version '1.1.0'
 
 sourceCompatibility = 1.8
 
@@ -18,5 +18,5 @@ repositories {
 
 dependencies {
     compileOnly 'net.luckperms:api:5.0'
-    compileOnly 'me.lucko.luckperms:common:5.0-SNAPSHOT'
+    compileOnly 'me.lucko.luckperms:common:5.1-SNAPSHOT'
 }

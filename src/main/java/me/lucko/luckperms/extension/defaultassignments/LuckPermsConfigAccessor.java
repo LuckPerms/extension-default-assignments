@@ -1,10 +1,13 @@
 package me.lucko.luckperms.extension.defaultassignments;
 
 import com.google.common.collect.ImmutableList;
+
 import me.lucko.luckperms.common.api.LuckPermsApiProvider;
-import me.lucko.luckperms.common.config.AbstractConfiguration;
-import me.lucko.luckperms.common.config.adapter.ConfigurationAdapter;
+import me.lucko.luckperms.common.config.LuckPermsConfiguration;
+import me.lucko.luckperms.common.config.generic.KeyedConfiguration;
+import me.lucko.luckperms.common.config.generic.adapter.ConfigurationAdapter;
 import me.lucko.luckperms.common.plugin.LuckPermsPlugin;
+
 import net.luckperms.api.LuckPerms;
 
 import java.lang.reflect.Field;
@@ -44,9 +47,9 @@ public enum LuckPermsConfigAccessor {
         apiProviderPluginField.setAccessible(true);
         LuckPermsPlugin plugin = (LuckPermsPlugin) apiProviderPluginField.get(luckPerms);
 
-        AbstractConfiguration configuration = (AbstractConfiguration) plugin.getConfiguration();
+        LuckPermsConfiguration configuration = plugin.getConfiguration();
 
-        Field configurationAdapterField = AbstractConfiguration.class.getDeclaredField("adapter");
+        Field configurationAdapterField = KeyedConfiguration.class.getDeclaredField("adapter");
         configurationAdapterField.setAccessible(true);
         return (ConfigurationAdapter) configurationAdapterField.get(configuration);
     }
